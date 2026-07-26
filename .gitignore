@@ -1,0 +1,16 @@
+# Build outputs
+/target/
+*.wasm
+
+# Never-commit artifacts (same guards as the monorepo)
+*.orig
+*.pyd
+__pycache__/
+vendor/
+
+# Editor / OS cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

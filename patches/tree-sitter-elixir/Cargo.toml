@@ -1,0 +1,19 @@
+[package]
+name = "tree-sitter-elixir"
+version = "0.3.5"
+edition = "2021"
+license = "MIT"
+# Patched: grammar C sources pre-compiled to lib/libtree_sitter_elixir.a for wasm32-wasip2
+# (zig cc, see docs/WASM_BUILD_PATCHES.md). Native builds compile the C sources.
+build = "build.rs"
+autolib = false
+
+[lib]
+name = "tree_sitter_elixir"
+path = "bindings/rust/lib.rs"
+
+[dependencies.tree-sitter-language]
+version = "0.1"
+
+[build-dependencies]
+cc = "1"
