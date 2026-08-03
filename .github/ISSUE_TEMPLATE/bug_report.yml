@@ -1,0 +1,48 @@
+name: Bug report (elixir)
+description: Something behaves incorrectly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Found a security problem? **Do not file it here.** Report it privately via
+        Security -> Report a vulnerability. See SECURITY.md.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Minimal elixir source that reproduces it
+      description: >
+        The smallest snippet that shows the problem. This gets pasted straight into a
+        test case, so smaller is genuinely better.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What the diff should have said
+      description: >
+        e.g. "this should be REFACTORING, not MEANINGFUL", or "the moved function should
+        be detected as MOVED".
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: IntentDiff version
+      description: Output of `intentdiff --version`, or the extension version.
+    validations:
+      required: false
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: OS, and how you installed IntentDiff.
+    validations:
+      required: false
