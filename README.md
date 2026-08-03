@@ -1,5 +1,9 @@
 # intentdiff-elixir-parser
 
+[![CI](https://github.com/buchochelliq-labs/intentdiff-elixir-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/buchochelliq-labs/intentdiff-elixir-parser/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Rust 1.95](https://img.shields.io/badge/rust-1.95-orange.svg)](https://www.rust-lang.org/)
+
 The **elixir parser plugin** for IntentDiff — a Wasm component (WASI p2, Component Model)
 implementing the `intentdiff:plugin` parser interface: it emits a deterministic
 `SemanticNode` tree for elixir sources.
