@@ -1,0 +1,34 @@
+# Managed centrally; mirrors the monorepo's .github/dependabot.yml.
+#
+# NOTE: merging a cargo bump here changes this parser's compiled component bytes,
+# which drifts it from the SHA-256 pinned in intentdiff-registry/registry.yaml.
+# Nothing in CI compares the two, so the drift is silent -- re-pin after merging.
+# Cargo updates are grouped into ONE weekly PR to keep that to a single re-pin.
+version: 2
+
+updates:
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "05:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "rust"
+    groups:
+      cargo-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "05:15"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
