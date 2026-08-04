@@ -5,7 +5,7 @@
 [![Rust 1.95](https://img.shields.io/badge/rust-1.95-orange.svg)](https://www.rust-lang.org/)
 
 The **elixir parser plugin** for IntentumDiff — a Wasm component (WASI p2, Component Model)
-implementing the `intentumdiff:plugin` parser interface: it emits a deterministic
+implementing the `intentdiff:plugin` parser interface: it emits a deterministic
 `SemanticNode` tree for elixir sources.
 
 ## Build
