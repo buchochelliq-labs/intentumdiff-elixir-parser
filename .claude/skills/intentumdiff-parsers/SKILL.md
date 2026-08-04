@@ -1,27 +1,27 @@
 ---
-name: intentdiff-parsers
+name: intentumdiff-parsers
 description: >-
-  How IntentDiff parses source into semantic trees — the Wasm parser-plugin architecture, the WIT
+  How IntentumDiff parses source into semantic trees — the Wasm parser-plugin architecture, the WIT
   contract, and how to add or fix a language. Use this whenever you work on a parser crate
   (`crates/<lang>-parser/`), add support for a new language, debug a parse error / fallback /
   wrong node types, touch the WIT plugin interface, or need to know why a language behaves the way
   it does at the tree level. It covers the five plugin worlds, `ParserMode::FullParse`, the
   CST→SemanticNode mapping, `detect-language`/`example` exports, the shipped-example contract, the
-  Wasm sandbox/fuel model, and the build. Read intentdiff-architecture for the boundary and
-  intentdiff-build for compiling; the per-language *diff tuning* above the parser is
-  intentdiff-language-profiles; the certified native path lives in the Rust core.
+  Wasm sandbox/fuel model, and the build. Read intentumdiff-architecture for the boundary and
+  intentumdiff-build for compiling; the per-language *diff tuning* above the parser is
+  intentumdiff-language-profiles; the certified native path lives in the Rust core.
 ---
 
-# IntentDiff — Parsers (Wasm plugins)
+# IntentumDiff — Parsers (Wasm plugins)
 
 Every language is parsed by a **WebAssembly component** — a self-contained parser whose grammar
 and CST→semantic mapping are compiled into a `.wasm` binary. The Python/host layer is pure
 orchestration; parsers run sandboxed with zero host capabilities. New parser work is Rust
-(`crates/<lang>-parser/`) compiled to `src/intentdiff/wasm/<lang>_parser.wasm`.
+(`crates/<lang>-parser/`) compiled to `src/intentumdiff/wasm/<lang>_parser.wasm`.
 
 ## The plugin contract (WIT — the only interface)
 
-`src/intentdiff/plugins/wit/plugin.wit` is the **single source of truth** for the plugin
+`src/intentumdiff/plugins/wit/plugin.wit` is the **single source of truth** for the plugin
 boundary (no Python ABCs). Five plugin worlds:
 
 | World | Role |
@@ -58,10 +58,10 @@ position-path or a counter) or the parse is rejected.
 - Right-sized nodes: definition nodes (`function_definition`, `class_definition`, language
   equivalents) with children for params/body, so the matcher and `NodeFacts` have structure.
 - `label` = the human identity token (name), `node_type` = the grammar role. These feed the
-  language-profile keying (see `intentdiff-language-profiles`) — if the node types/labels are
+  language-profile keying (see `intentumdiff-language-profiles`) — if the node types/labels are
   wrong, no profile can fix the diff. Set `parent_type` for methods (enables PULL_UP/PUSH_DOWN).
 - Definition nodes should carry `NodeFacts` (param_count/returns/body/async/generator) — computed
-  in the Rust CST→SemanticNode pass (see intentdiff-engine); privacy-safe counts/enums only.
+  in the Rust CST→SemanticNode pass (see intentumdiff-engine); privacy-safe counts/enums only.
 
 ## Adding a new language (outline)
 
@@ -71,19 +71,19 @@ position-path or a counter) or the parse is rejected.
 2. Implement `process` (FullParse), `detect-language`, `example`, `language-ids/info`,
    `trivia-node-types`. Map the CST to semantic nodes with stable unique ids and meaningful
    `node_type`/`label`.
-3. Build to `.wasm` and stage it (see intentdiff-build: `python build.py`); wire it into the
+3. Build to `.wasm` and stage it (see intentumdiff-build: `python build.py`); wire it into the
    registry/extension map.
 4. **Shipped-example contract:** each advertised language ID must parse without fallback/parse
    errors and produce a structured diff for its `example`. Dormant crates (e.g. FreeBASIC) stay
    disabled until they meet it.
-5. Add the per-language diff tuning in `intentdiff-language-profiles` (keyed/review/scaffold node
+5. Add the per-language diff tuning in `intentumdiff-language-profiles` (keyed/review/scaffold node
    types) and fixtures in `tests/fixtures/` + `tests/unit/test_snippet_gap_regressions.py`.
 
 ## The FIVE registration ledgers (miss one → detection or invariance tests fail)
 
 A new language id must be wired in ALL of these, or the parser silently never serves:
 
-1. `pyproject.toml` `[project.entry-points."intentdiff.parsers"]`.
+1. `pyproject.toml` `[project.entry-points."intentumdiff.parsers"]`.
 2. `plugins/registry.py` `_FIRST_PARTY_PARSER_ENTRYPOINT_FALLBACKS` (+ the entry fn in
    `plugins/builtins.py` returning `_wasm("<lang>_parser.wasm")`).
 3. `plugins/language_metadata.py` — `_DEFAULT_FILENAMES`, `_EXTENSIONS`, display-name tuples.
@@ -139,7 +139,7 @@ with care). Host imports exposed to plugins are only `strip-trivia`, `structural
 
 ## Debugging a parser
 
-- Parse errors / fallback: run `intentdiff file old new --profile-phases` or `diff_strings`; check
+- Parse errors / fallback: run `intentumdiff file old new --profile-phases` or `diff_strings`; check
   `diff.parse_errors` and `diff.is_fallback`. A first-party language falling back to the generic
   parser is a bug — the grammar or `detect-language` is the lead.
 - Wrong node types/labels: dump the tree (the parser's `process` output) for the snippet and
@@ -157,7 +157,7 @@ SKIP 40 variants; the SDK hash fix was one edit for all 60 precisely because has
 shared in `crates/sdk`).
 
 - Shared behavior (CST conversion, text capture incl. literal kinds, generic labeling,
-  position conventions, trivia) belongs in `intentdiff-plugin-sdk` — issue #47 tracks the
+  position conventions, trivia) belongs in `intentumdiff-plugin-sdk` — issue #47 tracks the
   `TreeSitterConverter` trait (Rust's abstract-base equivalent: a trait with default
   methods); per-crate code supplies ONLY data (semantic-type lists) and genuine language
   overrides (`label_override` hooks).

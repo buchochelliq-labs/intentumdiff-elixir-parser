@@ -10,5 +10,5 @@ permissions:
 
 jobs:
   ci:
-    uses: buchochelliq-labs/intentdiff-plugin-sdk/.github/workflows/parser-ci.yml@main
+    uses: buchochelliq-labs/intentumdiff-plugin-sdk/.github/workflows/parser-ci.yml@main
     secrets: inherit

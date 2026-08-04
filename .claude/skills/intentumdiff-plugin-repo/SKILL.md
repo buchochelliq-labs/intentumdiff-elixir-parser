@@ -1,23 +1,23 @@
 ---
-name: intentdiff-plugin-repo
+name: intentumdiff-plugin-repo
 description: >-
-  The RULES a standalone IntentDiff plugin repo must follow — every intentdiff-<lang>-parser (and
-  any third-party plugin, e.g. intentdiff-dbt). Use this whenever you create, scaffold, review, or
+  The RULES a standalone IntentumDiff plugin repo must follow — every intentumdiff-<lang>-parser (and
+  any third-party plugin, e.g. intentumdiff-dbt). Use this whenever you create, scaffold, review, or
   work in a plugin/parser repo: what it must contain, how it depends on the SDK, the WIT contract it
   implements, the CI it must pass, and how it earns trust via the registry. This skill is MASTERED
-  in intentdiff-plugin-sdk and COPIED (never forked) onto each plugin repo — edit the SDK master and
-  re-sync, never the local copy. Read intentdiff-parsers for parser mechanics and
-  intentdiff-repo-split for how the repos are created and how this skill is synced.
+  in intentumdiff-plugin-sdk and COPIED (never forked) onto each plugin repo — edit the SDK master and
+  re-sync, never the local copy. Read intentumdiff-parsers for parser mechanics and
+  intentumdiff-repo-split for how the repos are created and how this skill is synced.
 ---
 
-# IntentDiff — Plugin repo rules
+# IntentumDiff — Plugin repo rules
 
-> **This skill is mastered by `intentdiff-plugin-sdk` and copied onto each plugin repo. Do NOT edit
+> **This skill is mastered by `intentumdiff-plugin-sdk` and copied onto each plugin repo. Do NOT edit
 > the copy in a parser repo — change the SDK master and let the `sync-skills` job fan it out.**
 
 A plugin repo is one self-contained WebAssembly component (a parser is the common case) plus its
-build, tests, docs, and registry metadata. `intentdiff-<lang>-parser` x69 are first-party;
-third-party plugins (`intentdiff-dbt`, …) follow the same rules and the same loading path — there
+build, tests, docs, and registry metadata. `intentumdiff-<lang>-parser` x69 are first-party;
+third-party plugins (`intentumdiff-dbt`, …) follow the same rules and the same loading path — there
 is **no privileged first-party route**.
 
 ## The rules (a plugin repo MUST…)
@@ -25,7 +25,7 @@ is **no privileged first-party route**.
 1. **Implement the WIT contract, and only the WIT contract.** `plugin.wit` (from the SDK) is the
    single source of truth for the boundary — there is no Python ABC, no host-side interface. A
    parser implements the `parser-plugin` world.
-2. **Depend on `intentdiff-plugin-sdk`; never copy-paste conversion code.** Shared behavior (CST→
+2. **Depend on `intentumdiff-plugin-sdk`; never copy-paste conversion code.** Shared behavior (CST→
    SemanticNode conversion, text/literal capture, generic labeling, position conventions, trivia,
    structural hashing) lives in the SDK's `TreeSitterConverter`. The repo supplies ONLY data
    (semantic-type lists) and genuine language overrides (`label_override` hooks). *Maintainer ruling
@@ -50,7 +50,7 @@ is **no privileged first-party route**.
    an in-band `{error}` envelope, or a typed plugin exception, never a host crash), and per-crate
    `cargo test`. The SDK provides the reusable CI workflow.
 8. **Earn trust through the registry, not its repo.** "Official/safe" = **listed in
-   `intentdiff-registry` with a verified checksum, a clean capability scan, and a matching provenance
+   `intentumdiff-registry` with a verified checksum, a clean capability scan, and a matching provenance
    manifest** — enforced by the registry PR gate, NOT by which org owns the repo. Ship a provenance
    manifest (SHA-256 of the staged `.wasm` + source manifest) and declare `trust_tier` / `abi_target`.
 9. **Run sandboxed with zero host capabilities.** Parsers execute in wasmtime with empty WASI (no
@@ -62,23 +62,23 @@ is **no privileged first-party route**.
 ## What a plugin repo contains
 
 ```
-intentdiff-<lang>-parser/
-  Cargo.toml            # standalone; depends on the intentdiff SDK crate (not a workspace)
+intentumdiff-<lang>-parser/
+  Cargo.toml            # standalone; depends on the intentumdiff SDK crate (not a workspace)
   src/                  # the parser crate (grammar dep + semantic-type data + overrides)
   wit/                  # the pinned plugin.wit (from the SDK)
   tests/                # per-crate cargo tests + Tier-B parity/fuzz fixtures
   .github/workflows/    # the SDK-provided reusable CI (build .wasm + parity/fuzz + register)
   provenance.json       # SHA-256 + source manifest for the built .wasm
-  .claude/skills/       # this skill (SDK-mastered copy) + intentdiff-parsers
+  .claude/skills/       # this skill (SDK-mastered copy) + intentumdiff-parsers
   README.md
 ```
 
 ## Adding / fixing a language
 
-Follow `intentdiff-parsers` for the mechanics (scaffold from the SDK template, implement the
+Follow `intentumdiff-parsers` for the mechanics (scaffold from the SDK template, implement the
 exports, map the CST, the hard-won conversion rules). The repo-level difference from the monorepo:
 the five registration ledgers become **the registry entry + the ABI target** — a plugin repo does
-not edit the core's `pyproject`/`registry.py`; it registers itself in `intentdiff-registry`.
+not edit the core's `pyproject`/`registry.py`; it registers itself in `intentumdiff-registry`.
 
 ## Migration acceptance (files-only extraction)
 

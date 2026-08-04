@@ -8,10 +8,10 @@ security reports.
 
 ## Security model
 
-This repository is part of [IntentDiff](https://github.com/buchochelliq-labs/intentdiff-core) and
+This repository is part of [IntentumDiff](https://github.com/buchochelliq-labs/intentumdiff-core) and
 inherits the engine's security model -- the Wasm plugin sandbox, supply-chain pinning
 and subprocess hygiene -- documented in
-[intentdiff-core/SECURITY.md](https://github.com/buchochelliq-labs/intentdiff-core/blob/main/SECURITY.md).
+[intentumdiff-core/SECURITY.md](https://github.com/buchochelliq-labs/intentumdiff-core/blob/main/SECURITY.md).
 
 ### A note on the vendored grammar
 
