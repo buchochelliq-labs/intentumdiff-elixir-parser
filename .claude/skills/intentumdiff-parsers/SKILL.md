@@ -21,7 +21,7 @@ orchestration; parsers run sandboxed with zero host capabilities. New parser wor
 
 ## The plugin contract (WIT — the only interface)
 
-`src/intentdiff/plugins/wit/plugin.wit` is the **single source of truth** for the plugin
+`src/intentumdiff/plugins/wit/plugin.wit` is the **single source of truth** for the plugin
 boundary (no Python ABCs). Five plugin worlds:
 
 | World | Role |
