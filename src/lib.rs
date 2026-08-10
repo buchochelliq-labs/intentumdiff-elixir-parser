@@ -7,7 +7,7 @@
 //! represented as `call` nodes whose first identifier child is the macro name.
 //! This plugin lifts those into recognisable semantic constructs.
 
-use intentdiff_plugin_sdk::{
+use intentumdiff_plugin_sdk::{
     cst::CstNode,
     hash::structural_hash_with_memo,
     tree::{SemanticNode, SemanticNodeBuilder},
@@ -26,7 +26,7 @@ use crate::exports::intentdiff::plugin::parser::ParserMode;
 const PLUGIN_METADATA: &str = include_str!("../plugin_metadata.info");
 
 fn language_info_for(ids: Vec<String>) -> Vec<LanguageInfoRecord> {
-    let metadata = intentdiff_plugin_sdk::metadata::parse_plugin_metadata(PLUGIN_METADATA);
+    let metadata = intentumdiff_plugin_sdk::metadata::parse_plugin_metadata(PLUGIN_METADATA);
     ids.into_iter()
         .map(|language_id| {
             let info = metadata.language_or_default(&language_id);
@@ -160,7 +160,7 @@ fn label_for(node: &CstNode) -> String {
         return node.text_or_empty().to_string();
     }
     // Literal containers label with their captured source text (SDK-shared, issue #47).
-    if let Some(label) = intentdiff_plugin_sdk::ts_convert::literal_label(node) {
+    if let Some(label) = intentumdiff_plugin_sdk::ts_convert::literal_label(node) {
         return label;
     }
     match node.node_type.as_str() {
@@ -270,7 +270,7 @@ fn convert(
 
 
 
-use intentdiff_plugin_sdk::ts_convert::node_to_cst;
+use intentumdiff_plugin_sdk::ts_convert::node_to_cst;
 
 fn parse_source(source: &str) -> Result<CstNode, String> {
     let mut parser = tree_sitter::Parser::new();
@@ -350,7 +350,7 @@ export!(ElixirParser);
 mod tests {
     use super::*;
     use crate::exports::intentdiff::plugin::parser::Guest;
-    use intentdiff_plugin_sdk::testing as t;
+    use intentumdiff_plugin_sdk::testing as t;
 
     #[test]
     fn grammar_id_nonempty() {
